@@ -80,6 +80,10 @@
       letter-spacing:-.02em;
     }
 
+    /*
+    LOGIN
+    */
+
     .login-wrap{
       min-height:calc(100vh - 120px);
       display:flex;
@@ -164,6 +168,10 @@
       line-height:1.45;
     }
 
+    /*
+    HERO
+    */
+
     .hero{
       padding:28px 30px 24px;
       background:var(--purple);
@@ -196,6 +204,10 @@
       border-radius:10px;
       font-weight:600;
     }
+
+    /*
+    STATS
+    */
 
     .stats{
       display:flex;
@@ -234,6 +246,10 @@
       font-size:22px;
       font-weight:800;
     }
+
+    /*
+    CONTENT
+    */
 
     .content{
       margin-top:18px;
@@ -289,6 +305,10 @@
     .practicums .section-line{
       background:var(--orange);
     }
+
+    /*
+    CARDS
+    */
 
     .cards{
       display:grid;
@@ -356,6 +376,10 @@
       color:var(--orange);
     }
 
+    /*
+    MODAL
+    */
+
     dialog{
       width:min(
         660px,
@@ -365,6 +389,7 @@
       padding:0;
       border:0;
       border-radius:18px;
+
       box-shadow:
         0 20px 60px
         rgba(0,0,0,.18);
@@ -418,14 +443,9 @@
       font-weight:600;
     }
 
-    .bridge-frame{
-      position:absolute;
-      width:1px;
-      height:1px;
-      left:-9999px;
-      top:-9999px;
-      border:0;
-    }
+    /*
+    MOBILE
+    */
 
     @media(max-width:900px){
 
@@ -500,6 +520,9 @@
     </div>
 
 
+    <!-- LOGIN -->
+
+
     <section
       id="loginScreen"
       class="login-wrap"
@@ -571,6 +594,9 @@
     </section>
 
 
+    <!-- CABINET -->
+
+
     <section
       id="cabinetScreen"
       hidden
@@ -622,6 +648,9 @@
   </main>
 
 
+  <!-- MODAL -->
+
+
   <dialog id="dialog">
 
 
@@ -662,67 +691,29 @@
   </dialog>
 
 
-  <iframe
-    id="bridgeFrame"
-    name="sigmaBridgeFrame"
-    class="bridge-frame"
-    title="Служебный канал"
-  ></iframe>
-
-
-  <form
-    id="bridgeForm"
-    method="POST"
-    target="sigmaBridgeFrame"
-    action="https://script.google.com/macros/s/AKfycbz5jhbsj2t8mRr237NJals3BB7YGt2MbJgCRKZLDwxpRp2yH6NpDBSpRGqR2sX71r-X/exec"
-    hidden
-  >
-
-    <input
-      id="bridgeAction"
-      name="action"
-      type="hidden"
-      value="login"
-    >
-
-    <input
-      id="bridgeAccessCode"
-      name="accessCode"
-      type="hidden"
-    >
-
-    <input
-      id="bridgeClientId"
-      name="clientId"
-      type="hidden"
-    >
-
-    <input
-      id="bridgeRequestId"
-      name="requestId"
-      type="hidden"
-    >
-
-    <input
-      id="bridgeOrigin"
-      name="origin"
-      type="hidden"
-    >
-
-  </form>
-
-
   <script>
 
 
-    const APPS_SCRIPT_ALLOWED_ORIGINS = [
-      'https://script.google.com',
-      'https://script.googleusercontent.com'
-    ];
+    /*
+    ============================================
+    BACKEND
+    ============================================
+    */
 
 
-    const RESPONSE_TYPE =
-      'sigma-lk-response';
+    const API_URL =
+      'https://script.google.com/macros/s/AKfycbz5jhbsj2t8mRr237NJals3BB7YGt2MbJgCRKZLDwxpRp2yH6NpDBSpRGqR2sX71r-X/exec';
+
+
+    const CALLBACK_NAME =
+      'sigmaLoginCallback';
+
+
+    /*
+    ============================================
+    DOM
+    ============================================
+    */
 
 
     const loginScreen =
@@ -809,38 +800,22 @@
       );
 
 
-    const bridgeForm =
-      document.getElementById(
-        'bridgeForm'
-      );
+    /*
+    ============================================
+    JSONP STATE
+    ============================================
+    */
 
 
-    const bridgeAccessCode =
-      document.getElementById(
-        'bridgeAccessCode'
-      );
-
-
-    const bridgeClientId =
-      document.getElementById(
-        'bridgeClientId'
-      );
-
-
-    const bridgeRequestId =
-      document.getElementById(
-        'bridgeRequestId'
-      );
-
-
-    const bridgeOrigin =
-      document.getElementById(
-        'bridgeOrigin'
-      );
-
-
-    let pendingRequest =
+    let pendingJsonp =
       null;
+
+
+    /*
+    ============================================
+    CLIENT ID
+    ============================================
+    */
 
 
     function getClientId() {
@@ -852,7 +827,9 @@
         );
 
 
-      if(clientId) {
+      if(
+        clientId
+      ) {
 
         return clientId;
 
@@ -893,6 +870,13 @@
     }
 
 
+    /*
+    ============================================
+    REQUEST ID
+    ============================================
+    */
+
+
     function createRequestId() {
 
 
@@ -917,6 +901,87 @@
       );
 
     }
+
+
+    /*
+    ============================================
+    GLOBAL JSONP CALLBACK
+    ============================================
+    */
+
+
+    window[CALLBACK_NAME] =
+      function(payload) {
+
+
+        if(
+          !pendingJsonp
+        ) {
+
+          return;
+
+        }
+
+
+        if(
+          !payload ||
+          payload.type !==
+          'sigma-lk-response'
+        ) {
+
+          return;
+
+        }
+
+
+        if(
+          payload.requestId !==
+          pendingJsonp.requestId
+        ) {
+
+          return;
+
+        }
+
+
+        clearTimeout(
+          pendingJsonp.timeout
+        );
+
+
+        if(
+          pendingJsonp.script &&
+          pendingJsonp.script.parentNode
+        ) {
+
+          pendingJsonp.script.parentNode
+            .removeChild(
+              pendingJsonp.script
+            );
+
+        }
+
+
+        const resolve =
+          pendingJsonp.resolve;
+
+
+        pendingJsonp =
+          null;
+
+
+        resolve(
+          payload.result
+        );
+
+      };
+
+
+    /*
+    ============================================
+    LOGIN FORM
+    ============================================
+    */
 
 
     loginForm.addEventListener(
@@ -959,8 +1024,9 @@
 
         try {
 
+
           const result =
-            await loginThroughBridge(
+            await loginViaJsonp(
               code,
               getClientId()
             );
@@ -1004,6 +1070,7 @@
         }
         catch(error) {
 
+
           console.error(
             error
           );
@@ -1015,6 +1082,7 @@
         }
         finally {
 
+
           setLoading(
             false
           );
@@ -1025,10 +1093,18 @@
     );
 
 
-    function loginThroughBridge(
+    /*
+    ============================================
+    JSONP LOGIN
+    ============================================
+    */
+
+
+    function loginViaJsonp(
       accessCode,
       clientId
     ) {
+
 
       return new Promise(
         function(
@@ -1037,8 +1113,13 @@
         ) {
 
 
+          /*
+          Один запрос за раз
+          */
+
+
           if(
-            pendingRequest
+            pendingJsonp
           ) {
 
             reject(
@@ -1056,34 +1137,168 @@
             createRequestId();
 
 
+          const url =
+            new URL(
+              API_URL
+            );
+
+
+          url.searchParams.set(
+            'action',
+            'login'
+          );
+
+
+          url.searchParams.set(
+            'accessCode',
+            accessCode
+          );
+
+
+          url.searchParams.set(
+            'clientId',
+            clientId
+          );
+
+
+          url.searchParams.set(
+            'requestId',
+            requestId
+          );
+
+
+          url.searchParams.set(
+            'callback',
+            CALLBACK_NAME
+          );
+
+
+          /*
+          Антикэш-параметр
+          */
+
+
+          url.searchParams.set(
+            '_',
+            String(
+              Date.now()
+            )
+          );
+
+
+          const script =
+            document.createElement(
+              'script'
+            );
+
+
+          script.async =
+            true;
+
+
+          script.src =
+            url.toString();
+
+
+          /*
+          Ошибка загрузки
+          */
+
+
+          script.onerror =
+            function() {
+
+
+              if(
+                !pendingJsonp ||
+                pendingJsonp.requestId !==
+                requestId
+              ) {
+
+                return;
+
+              }
+
+
+              clearTimeout(
+                pendingJsonp.timeout
+              );
+
+
+              if(
+                script.parentNode
+              ) {
+
+                script.parentNode
+                  .removeChild(
+                    script
+                  );
+
+              }
+
+
+              pendingJsonp =
+                null;
+
+
+              reject(
+                new Error(
+                  'Не удалось загрузить ответ Apps Script.'
+                )
+              );
+
+            };
+
+
+          /*
+          Timeout
+          */
+
+
           const timeout =
             setTimeout(
               function() {
 
+
                 if(
-                  pendingRequest &&
-                  pendingRequest.requestId ===
+                  !pendingJsonp ||
+                  pendingJsonp.requestId !==
                   requestId
                 ) {
 
-                  pendingRequest =
-                    null;
-
-
-                  reject(
-                    new Error(
-                      'Истекло время ожидания ответа.'
-                    )
-                  );
+                  return;
 
                 }
+
+
+                if(
+                  script.parentNode
+                ) {
+
+                  script.parentNode
+                    .removeChild(
+                      script
+                    );
+
+                }
+
+
+                pendingJsonp =
+                  null;
+
+
+                reject(
+                  new Error(
+                    'Истекло время ожидания ответа.'
+                  )
+                );
 
               },
               20000
             );
 
 
-          pendingRequest = {
+          pendingJsonp = {
 
             requestId:
               requestId,
@@ -1094,29 +1309,18 @@
             reject:
               reject,
 
+            script:
+              script,
+
             timeout:
               timeout
 
           };
 
 
-          bridgeAccessCode.value =
-            accessCode;
-
-
-          bridgeClientId.value =
-            clientId;
-
-
-          bridgeRequestId.value =
-            requestId;
-
-
-          bridgeOrigin.value =
-            window.location.origin;
-
-
-          bridgeForm.submit();
+          document.head.appendChild(
+            script
+          );
 
         }
       );
@@ -1124,75 +1328,11 @@
     }
 
 
-    window.addEventListener(
-      'message',
-      function(event) {
-
-
-        if(
-          !APPS_SCRIPT_ALLOWED_ORIGINS.includes(
-            event.origin
-          )
-        ) {
-
-          return;
-
-        }
-
-
-        const message =
-          event.data;
-
-
-        if(
-          !message ||
-          message.type !==
-          RESPONSE_TYPE
-        ) {
-
-          return;
-
-        }
-
-
-        if(
-          !pendingRequest
-        ) {
-
-          return;
-
-        }
-
-
-        if(
-          message.requestId !==
-          pendingRequest.requestId
-        ) {
-
-          return;
-
-        }
-
-
-        clearTimeout(
-          pendingRequest.timeout
-        );
-
-
-        const resolve =
-          pendingRequest.resolve;
-
-
-        pendingRequest =
-          null;
-
-
-        resolve(
-          message.result
-        );
-
-      }
-    );
+    /*
+    ============================================
+    CABINET
+    ============================================
+    */
 
 
     function renderCabinet(
@@ -1201,7 +1341,8 @@
 
 
       studentName.textContent =
-        cabinet.name || '';
+        cabinet.name ||
+        '';
 
 
       renderStats(
@@ -1255,6 +1396,13 @@
       }
 
     }
+
+
+    /*
+    ============================================
+    STATS
+    ============================================
+    */
 
 
     function renderStats(
@@ -1388,6 +1536,13 @@
       return block;
 
     }
+
+
+    /*
+    ============================================
+    PROGRAM
+    ============================================
+    */
 
 
     function createProgramSection(
@@ -1618,6 +1773,13 @@
     }
 
 
+    /*
+    ============================================
+    PRACTICUMS
+    ============================================
+    */
+
+
     function createPracticumsSection(
       practicums
     ) {
@@ -1710,6 +1872,13 @@
     }
 
 
+    /*
+    ============================================
+    GRID
+    ============================================
+    */
+
+
     function applyGridColumns(
       container,
       count
@@ -1765,6 +1934,13 @@
         ', minmax(0,1fr))';
 
     }
+
+
+    /*
+    ============================================
+    RESULT CARD
+    ============================================
+    */
 
 
     function createResultCard(
@@ -1929,6 +2105,13 @@
     }
 
 
+    /*
+    ============================================
+    MODAL
+    ============================================
+    */
+
+
     function openResultDialog(
       title,
       text
@@ -2061,6 +2244,13 @@
     );
 
 
+    /*
+    ============================================
+    LOGOUT
+    ============================================
+    */
+
+
     logoutButton.addEventListener(
       'click',
       function() {
@@ -2091,6 +2281,13 @@
 
       }
     );
+
+
+    /*
+    ============================================
+    SCREENS
+    ============================================
+    */
 
 
     function showCabinet() {
@@ -2131,6 +2328,13 @@
     }
 
 
+    /*
+    ============================================
+    LOADING
+    ============================================
+    */
+
+
     function setLoading(
       isLoading
     ) {
@@ -2150,6 +2354,13 @@
           : 'Войти';
 
     }
+
+
+    /*
+    ============================================
+    INPUT
+    ============================================
+    */
 
 
     accessCodeInput.addEventListener(
