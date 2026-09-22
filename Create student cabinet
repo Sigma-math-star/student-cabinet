@@ -1,0 +1,2393 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>
+    Сигма · Личный кабинет
+  </title>
+
+  <style>
+
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Unbounded:wght@700;800&display=swap');
+
+    :root{
+      --green:#91B94A;
+      --black:#2B2A29;
+      --purple:#4E3479;
+      --white:#FFFFFF;
+      --gray:#E5E6E6;
+      --yellow:#EADB4C;
+      --orange:#D97A38;
+      --red:#752E27;
+      --blue:#314388;
+      --bg:#F7F7F5;
+      --muted:#6E6E6E;
+    }
+
+    *{
+      box-sizing:border-box;
+    }
+
+    html,
+    body{
+      min-height:100%;
+    }
+
+    body{
+      margin:0;
+      background:var(--bg);
+      color:var(--black);
+      font-family:'Montserrat',Arial,sans-serif;
+    }
+
+    button,
+    input{
+      font:inherit;
+    }
+
+    button{
+      cursor:pointer;
+    }
+
+    [hidden]{
+      display:none !important;
+    }
+
+    .page{
+      width:min(
+        1160px,
+        calc(100% - 28px)
+      );
+
+      margin:0 auto;
+      padding:24px 0 56px;
+    }
+
+    .brand{
+      margin-bottom:18px;
+
+      color:var(--purple);
+
+      font-family:'Unbounded',sans-serif;
+      font-size:22px;
+      font-weight:800;
+
+      letter-spacing:-.02em;
+    }
+
+    /*
+    LOGIN
+    */
+
+    .login-wrap{
+      min-height:calc(100vh - 120px);
+
+      display:flex;
+      align-items:center;
+      justify-content:center;
+
+      padding:30px 0 80px;
+    }
+
+    .login-card{
+      width:min(560px,100%);
+
+      padding:34px;
+
+      background:var(--white);
+
+      border:1px solid var(--gray);
+      border-radius:22px;
+    }
+
+    .login-title{
+      margin:0;
+
+      color:var(--black);
+
+      font-family:'Unbounded',sans-serif;
+      font-size:clamp(30px,5vw,42px);
+      font-weight:800;
+
+      line-height:1.08;
+      letter-spacing:-.035em;
+    }
+
+    .login-text{
+      margin:14px 0 24px;
+
+      color:var(--muted);
+
+      font-size:15px;
+      line-height:1.55;
+    }
+
+    .code-label{
+      display:block;
+
+      margin-bottom:8px;
+
+      font-size:14px;
+      font-weight:700;
+    }
+
+    .code-input{
+      width:100%;
+      height:58px;
+
+      padding:0 16px;
+
+      color:var(--black);
+      background:var(--white);
+
+      border:1.5px solid var(--gray);
+      border-radius:14px;
+
+      outline:none;
+
+      font-size:22px;
+      font-weight:700;
+
+      letter-spacing:.08em;
+    }
+
+    .code-input:focus{
+      border-color:var(--purple);
+    }
+
+    .login-button{
+      width:100%;
+      min-height:54px;
+
+      margin-top:12px;
+      padding:12px 18px;
+
+      background:var(--purple);
+      color:var(--white);
+
+      border:0;
+      border-radius:14px;
+
+      font-weight:800;
+    }
+
+    .login-button:disabled{
+      opacity:.55;
+      cursor:default;
+    }
+
+    .login-error{
+      min-height:22px;
+
+      margin-top:14px;
+
+      color:var(--red);
+
+      font-size:14px;
+      font-weight:600;
+      line-height:1.45;
+    }
+
+    /*
+    HERO
+    */
+
+    .hero{
+      padding:28px 30px 24px;
+
+      background:var(--purple);
+      color:var(--white);
+
+      border-radius:22px;
+    }
+
+    .hero-top{
+      display:flex;
+
+      align-items:flex-start;
+      justify-content:space-between;
+
+      gap:20px;
+    }
+
+    .student-name{
+      margin:0;
+
+      font-family:'Unbounded',sans-serif;
+      font-size:clamp(38px,5vw,54px);
+      font-weight:800;
+
+      line-height:1.02;
+      letter-spacing:-.04em;
+    }
+
+    .logout{
+      flex:0 0 auto;
+
+      padding:9px 14px;
+
+      color:var(--white);
+      background:transparent;
+
+      border:1px solid var(--white);
+      border-radius:10px;
+
+      font-weight:600;
+    }
+
+    /*
+    STATS
+    */
+
+    .stats{
+      display:flex;
+      flex-wrap:wrap;
+
+      gap:10px;
+
+      margin-top:24px;
+    }
+
+    .stat{
+      min-width:145px;
+
+      padding:13px 16px;
+
+      color:var(--black);
+
+      border-radius:14px;
+    }
+
+    .stat.sigmuses{
+      background:var(--green);
+    }
+
+    .stat.xp{
+      background:var(--yellow);
+    }
+
+    .stat.rank{
+      background:var(--orange);
+    }
+
+    .stat-label{
+      display:block;
+
+      margin-bottom:3px;
+
+      opacity:.7;
+
+      font-size:13px;
+    }
+
+    .stat-value{
+      font-size:22px;
+      font-weight:800;
+    }
+
+    /*
+    CONTENT
+    */
+
+    .content{
+      margin-top:18px;
+
+      padding:28px;
+
+      background:var(--white);
+
+      border:1px solid var(--gray);
+      border-radius:22px;
+    }
+
+    .section{
+      margin-top:34px;
+    }
+
+    .section:first-child{
+      margin-top:0;
+    }
+
+    .section-title{
+      margin:0;
+
+      font-family:'Unbounded',sans-serif;
+      font-size:24px;
+      font-weight:800;
+
+      line-height:1.14;
+      letter-spacing:-.02em;
+    }
+
+    .section-meta{
+      margin-top:4px;
+
+      color:var(--muted);
+
+      font-size:15px;
+      font-weight:600;
+    }
+
+    .section-line{
+      width:62px;
+      height:5px;
+
+      margin:10px 0 14px;
+
+      border-radius:999px;
+    }
+
+    .olympiad .section-line{
+      background:var(--purple);
+    }
+
+    .advanced .section-line{
+      background:var(--green);
+    }
+
+    .ag .section-line{
+      background:var(--blue);
+    }
+
+    .practicums .section-line{
+      background:var(--orange);
+    }
+
+    /*
+    CARDS
+    */
+
+    .cards{
+      display:grid;
+
+      gap:10px;
+    }
+
+    .card{
+      min-height:94px;
+
+      padding:15px;
+
+      background:var(--white);
+
+      border:1px solid var(--gray);
+      border-radius:14px;
+
+      text-align:left;
+    }
+
+    .card.ready{
+      border-width:2px;
+    }
+
+    .olympiad .card.ready{
+      border-color:var(--purple);
+    }
+
+    .advanced .card.ready{
+      border-color:var(--green);
+    }
+
+    .ag .card.ready{
+      border-color:var(--blue);
+    }
+
+    .practicums .card.ready{
+      border-color:var(--orange);
+    }
+
+    .card-title{
+      margin-bottom:6px;
+
+      font-size:16px;
+      font-weight:800;
+    }
+
+    .card-status{
+      color:#777;
+
+      font-size:13px;
+      line-height:1.35;
+    }
+
+    .card.ready .card-status{
+      font-weight:700;
+    }
+
+    .olympiad
+    .card.ready
+    .card-status{
+      color:var(--purple);
+    }
+
+    .advanced
+    .card.ready
+    .card-status{
+      color:var(--green);
+    }
+
+    .ag
+    .card.ready
+    .card-status{
+      color:var(--blue);
+    }
+
+    .practicums
+    .card.ready
+    .card-status{
+      color:var(--orange);
+    }
+
+    /*
+    MODAL
+    */
+
+    dialog{
+      width:min(
+        660px,
+        calc(100% - 28px)
+      );
+
+      padding:0;
+
+      border:0;
+      border-radius:18px;
+
+      box-shadow:
+        0 20px 60px
+        rgba(0,0,0,.18);
+    }
+
+    dialog::backdrop{
+      background:
+        rgba(43,42,41,.26);
+    }
+
+    .modal{
+      padding:24px;
+
+      background:var(--white);
+    }
+
+    .modal-head{
+      display:flex;
+
+      align-items:flex-start;
+      justify-content:space-between;
+
+      gap:16px;
+
+      margin-bottom:14px;
+    }
+
+    .modal-title{
+      margin:0;
+
+      font-family:'Unbounded',sans-serif;
+      font-size:22px;
+      font-weight:800;
+
+      line-height:1.2;
+    }
+
+    .close{
+      flex:0 0 auto;
+
+      width:34px;
+      height:34px;
+
+      padding:0;
+
+      background:var(--gray);
+
+      border:0;
+      border-radius:50%;
+
+      font-size:20px;
+    }
+
+    .modal-content{
+      white-space:pre-wrap;
+
+      line-height:1.65;
+
+      overflow-wrap:anywhere;
+    }
+
+    .modal-content a{
+      color:var(--purple);
+      font-weight:600;
+    }
+
+    /*
+    HIDDEN APPS SCRIPT BRIDGE
+    */
+
+    .bridge-frame{
+      position:absolute;
+
+      width:1px;
+      height:1px;
+
+      left:-9999px;
+      top:-9999px;
+
+      border:0;
+    }
+
+    /*
+    MOBILE
+    */
+
+    @media(max-width:900px){
+
+      .cards{
+        grid-template-columns:
+          repeat(
+            2,
+            minmax(0,1fr)
+          )
+          !important;
+      }
+
+    }
+
+    @media(max-width:620px){
+
+      .page{
+        width:calc(100% - 16px);
+
+        padding-top:16px;
+      }
+
+      .brand{
+        font-size:18px;
+      }
+
+      .login-card{
+        padding:24px 20px;
+      }
+
+      .hero{
+        padding:22px 20px;
+      }
+
+      .hero-top{
+        flex-direction:column;
+      }
+
+      .student-name{
+        font-size:36px;
+      }
+
+      .content{
+        padding:20px;
+      }
+
+      .cards{
+        grid-template-columns:
+          1fr
+          !important;
+      }
+
+      .stat{
+        min-width:0;
+
+        flex:1 1 30%;
+      }
+
+    }
+
+  </style>
+
+</head>
+
+
+<body>
+
+
+  <main class="page">
+
+
+    <div class="brand">
+
+      Сигма · Личный кабинет
+
+    </div>
+
+
+    <!-- LOGIN SCREEN -->
+
+
+    <section
+      id="loginScreen"
+      class="login-wrap"
+    >
+
+
+      <div class="login-card">
+
+
+        <h1 class="login-title">
+
+          Войти в личный кабинет
+
+        </h1>
+
+
+        <p class="login-text">
+
+          Введите ваш
+          8-значный код доступа.
+
+        </p>
+
+
+        <form
+          id="loginForm"
+          autocomplete="off"
+        >
+
+
+          <label
+            class="code-label"
+            for="accessCode"
+          >
+
+            Код доступа
+
+          </label>
+
+
+          <input
+            id="accessCode"
+            class="code-input"
+            type="text"
+            inputmode="numeric"
+            autocomplete="one-time-code"
+            maxlength="8"
+            pattern="[0-9]{8}"
+            placeholder="00000000"
+            required
+          >
+
+
+          <button
+            id="loginButton"
+            class="login-button"
+            type="submit"
+          >
+
+            Войти
+
+          </button>
+
+
+          <div
+            id="loginError"
+            class="login-error"
+            aria-live="polite"
+          ></div>
+
+
+        </form>
+
+
+      </div>
+
+
+    </section>
+
+
+    <!-- CABINET SCREEN -->
+
+
+    <section
+      id="cabinetScreen"
+      hidden
+    >
+
+
+      <section class="hero">
+
+
+        <div class="hero-top">
+
+
+          <h1
+            id="studentName"
+            class="student-name"
+          ></h1>
+
+
+          <button
+            id="logoutButton"
+            class="logout"
+            type="button"
+          >
+
+            Выйти
+
+          </button>
+
+
+        </div>
+
+
+        <div
+          id="stats"
+          class="stats"
+        ></div>
+
+
+      </section>
+
+
+      <section
+        id="content"
+        class="content"
+      ></section>
+
+
+    </section>
+
+
+  </main>
+
+
+  <!-- RESULT DIALOG -->
+
+
+  <dialog id="dialog">
+
+
+    <div class="modal">
+
+
+      <div class="modal-head">
+
+
+        <h2
+          id="dialogTitle"
+          class="modal-title"
+        ></h2>
+
+
+        <button
+          id="closeDialog"
+          class="close"
+          type="button"
+          aria-label="Закрыть"
+        >
+
+          ×
+
+        </button>
+
+
+      </div>
+
+
+      <div
+        id="dialogContent"
+        class="modal-content"
+      ></div>
+
+
+    </div>
+
+
+  </dialog>
+
+
+  <!--
+    HIDDEN FORM BRIDGE TO APPS SCRIPT
+  -->
+
+
+  <iframe
+    id="bridgeFrame"
+    name="sigmaBridgeFrame"
+    class="bridge-frame"
+    title="Служебный канал"
+  ></iframe>
+
+
+  <form
+    id="bridgeForm"
+    method="POST"
+    target="sigmaBridgeFrame"
+    action="https://script.google.com/macros/s/AKfycbz5jhbsj2t8mRr237NJals3BB7YGt2MbJgCRKZLDwxpRp2yH6NpDBSpRGqR2sX71r-X/exec"
+    hidden
+  >
+
+    <input
+      id="bridgeAction"
+      name="action"
+      type="hidden"
+      value="login"
+    >
+
+    <input
+      id="bridgeAccessCode"
+      name="accessCode"
+      type="hidden"
+    >
+
+    <input
+      id="bridgeClientId"
+      name="clientId"
+      type="hidden"
+    >
+
+    <input
+      id="bridgeRequestId"
+      name="requestId"
+      type="hidden"
+    >
+
+    <input
+      id="bridgeOrigin"
+      name="origin"
+      type="hidden"
+    >
+
+  </form>
+
+
+  <script>
+
+
+    /*
+    ============================================
+    CONSTANTS
+    ============================================
+    */
+
+
+    const APPS_SCRIPT_ORIGIN =
+      'https://script.google.com';
+
+
+    const RESPONSE_TYPE =
+      'sigma-lk-response';
+
+
+    /*
+    ============================================
+    DOM
+    ============================================
+    */
+
+
+    const loginScreen =
+      document.getElementById(
+        'loginScreen'
+      );
+
+
+    const cabinetScreen =
+      document.getElementById(
+        'cabinetScreen'
+      );
+
+
+    const loginForm =
+      document.getElementById(
+        'loginForm'
+      );
+
+
+    const accessCodeInput =
+      document.getElementById(
+        'accessCode'
+      );
+
+
+    const loginButton =
+      document.getElementById(
+        'loginButton'
+      );
+
+
+    const loginError =
+      document.getElementById(
+        'loginError'
+      );
+
+
+    const studentName =
+      document.getElementById(
+        'studentName'
+      );
+
+
+    const stats =
+      document.getElementById(
+        'stats'
+      );
+
+
+    const content =
+      document.getElementById(
+        'content'
+      );
+
+
+    const logoutButton =
+      document.getElementById(
+        'logoutButton'
+      );
+
+
+    const dialog =
+      document.getElementById(
+        'dialog'
+      );
+
+
+    const dialogTitle =
+      document.getElementById(
+        'dialogTitle'
+      );
+
+
+    const dialogContent =
+      document.getElementById(
+        'dialogContent'
+      );
+
+
+    const closeDialog =
+      document.getElementById(
+        'closeDialog'
+      );
+
+
+    const bridgeForm =
+      document.getElementById(
+        'bridgeForm'
+      );
+
+
+    const bridgeAccessCode =
+      document.getElementById(
+        'bridgeAccessCode'
+      );
+
+
+    const bridgeClientId =
+      document.getElementById(
+        'bridgeClientId'
+      );
+
+
+    const bridgeRequestId =
+      document.getElementById(
+        'bridgeRequestId'
+      );
+
+
+    const bridgeOrigin =
+      document.getElementById(
+        'bridgeOrigin'
+      );
+
+
+    /*
+    ============================================
+    LOGIN REQUEST STATE
+    ============================================
+    */
+
+
+    let pendingRequest = null;
+
+
+    /*
+    ============================================
+    CLIENT ID
+    ============================================
+    */
+
+
+    function getClientId() {
+
+      let clientId =
+        localStorage.getItem(
+          'sigma_lk_client_id'
+        );
+
+
+      if(clientId) {
+        return clientId;
+      }
+
+
+      if(
+        window.crypto &&
+        typeof crypto.randomUUID ===
+        'function'
+      ) {
+
+        clientId =
+          crypto.randomUUID();
+
+      }
+      else {
+
+        clientId =
+          'client-' +
+          Date.now() +
+          '-' +
+          Math.random()
+            .toString(36)
+            .slice(2);
+
+      }
+
+
+      localStorage.setItem(
+        'sigma_lk_client_id',
+        clientId
+      );
+
+
+      return clientId;
+
+    }
+
+
+    /*
+    ============================================
+    REQUEST ID
+    ============================================
+    */
+
+
+    function createRequestId() {
+
+      if(
+        window.crypto &&
+        typeof crypto.randomUUID ===
+        'function'
+      ) {
+
+        return crypto.randomUUID();
+
+      }
+
+
+      return (
+        'req-' +
+        Date.now() +
+        '-' +
+        Math.random()
+          .toString(36)
+          .slice(2)
+      );
+
+    }
+
+
+    /*
+    ============================================
+    LOGIN SUBMIT
+    ============================================
+    */
+
+
+    loginForm.addEventListener(
+      'submit',
+      async event => {
+
+        event.preventDefault();
+
+
+        loginError.textContent =
+          '';
+
+
+        const code =
+          accessCodeInput
+            .value
+            .replace(
+              /\D/g,
+              ''
+            );
+
+
+        if(
+          code.length !== 8
+        ) {
+
+          loginError.textContent =
+            'Введите 8-значный код.';
+
+          return;
+
+        }
+
+
+        setLoading(true);
+
+
+        try {
+
+          const result =
+            await loginThroughBridge(
+              code,
+              getClientId()
+            );
+
+
+          if(
+            !result ||
+            result.ok !== true
+          ) {
+
+            loginError.textContent =
+              result &&
+              result.message
+                ? result.message
+                : 'Не удалось войти. Попробуйте ещё раз.';
+
+            return;
+
+          }
+
+
+          if(
+            !result.cabinet
+          ) {
+
+            loginError.textContent =
+              'Не удалось загрузить данные кабинета.';
+
+            return;
+
+          }
+
+
+          renderCabinet(
+            result.cabinet
+          );
+
+
+          showCabinet();
+
+        }
+        catch(error) {
+
+          console.error(
+            error
+          );
+
+
+          loginError.textContent =
+            'Не удалось связаться с сервером. Попробуйте немного позже.';
+
+        }
+        finally {
+
+          setLoading(false);
+
+        }
+
+      }
+    );
+
+
+    /*
+    ============================================
+    APPS SCRIPT BRIDGE
+    ============================================
+    */
+
+
+    function loginThroughBridge(
+      accessCode,
+      clientId
+    ) {
+
+      return new Promise(
+        function(resolve,reject) {
+
+          if(pendingRequest) {
+
+            reject(
+              new Error(
+                'Уже выполняется запрос.'
+              )
+            );
+
+            return;
+
+          }
+
+
+          const requestId =
+            createRequestId();
+
+
+          const timeout =
+            setTimeout(
+              function() {
+
+                if(
+                  pendingRequest &&
+                  pendingRequest.requestId ===
+                  requestId
+                ) {
+
+                  pendingRequest = null;
+
+
+                  reject(
+                    new Error(
+                      'Истекло время ожидания ответа.'
+                    )
+                  );
+
+                }
+
+              },
+              20000
+            );
+
+
+          pendingRequest = {
+            requestId:
+              requestId,
+
+            resolve:
+              resolve,
+
+            reject:
+              reject,
+
+            timeout:
+              timeout
+          };
+
+
+          bridgeAccessCode.value =
+            accessCode;
+
+
+          bridgeClientId.value =
+            clientId;
+
+
+          bridgeRequestId.value =
+            requestId;
+
+
+          bridgeOrigin.value =
+            window.location.origin;
+
+
+          bridgeForm.submit();
+
+        }
+      );
+
+    }
+
+
+    /*
+    ============================================
+    RECEIVE APPS SCRIPT RESPONSE
+    ============================================
+    */
+
+
+    window.addEventListener(
+      'message',
+      function(event) {
+
+        if(
+          event.origin !==
+          APPS_SCRIPT_ORIGIN
+        ) {
+
+          return;
+
+        }
+
+
+        const message =
+          event.data;
+
+
+        if(
+          !message ||
+          message.type !==
+          RESPONSE_TYPE
+        ) {
+
+          return;
+
+        }
+
+
+        if(
+          !pendingRequest
+        ) {
+
+          return;
+
+        }
+
+
+        if(
+          message.requestId !==
+          pendingRequest.requestId
+        ) {
+
+          return;
+
+        }
+
+
+        clearTimeout(
+          pendingRequest.timeout
+        );
+
+
+        const resolve =
+          pendingRequest.resolve;
+
+
+        pendingRequest =
+          null;
+
+
+        resolve(
+          message.result
+        );
+
+      }
+    );
+
+
+    /*
+    ============================================
+    CABINET
+    ============================================
+    */
+
+
+    function renderCabinet(
+      cabinet
+    ) {
+
+      studentName.textContent =
+        cabinet.name || '';
+
+
+      renderStats(
+        cabinet
+      );
+
+
+      content.replaceChildren();
+
+
+      const programs =
+        Array.isArray(
+          cabinet.programs
+        )
+          ? cabinet.programs
+          : [];
+
+
+      programs.forEach(
+        function(program) {
+
+          content.appendChild(
+            createProgramSection(
+              program
+            )
+          );
+
+        }
+      );
+
+
+      const practicums =
+        Array.isArray(
+          cabinet.mathPracticums
+        )
+          ? cabinet.mathPracticums
+          : [];
+
+
+      if(
+        practicums.length > 0
+      ) {
+
+        content.appendChild(
+          createPracticumsSection(
+            practicums
+          )
+        );
+
+      }
+
+    }
+
+
+    /*
+    ============================================
+    STATS
+    ============================================
+    */
+
+
+    function renderStats(
+      cabinet
+    ) {
+
+      stats.replaceChildren();
+
+
+      if(
+        hasValue(
+          cabinet.sigmuses
+        )
+      ) {
+
+        stats.appendChild(
+          createStat(
+            'Сигмусы',
+            cabinet.sigmuses,
+            'sigmuses'
+          )
+        );
+
+      }
+
+
+      if(
+        hasValue(
+          cabinet.xp
+        )
+      ) {
+
+        stats.appendChild(
+          createStat(
+            'XP',
+            cabinet.xp,
+            'xp'
+          )
+        );
+
+      }
+
+
+      if(
+        hasValue(
+          cabinet.rank
+        )
+      ) {
+
+        stats.appendChild(
+          createStat(
+            'Ранг',
+            cabinet.rank,
+            'rank'
+          )
+        );
+
+      }
+
+    }
+
+
+    function hasValue(
+      value
+    ) {
+
+      return !(
+        value === '' ||
+        value === null ||
+        value === undefined
+      );
+
+    }
+
+
+    function createStat(
+      label,
+      value,
+      cssClass
+    ) {
+
+      const block =
+        document.createElement(
+          'div'
+        );
+
+
+      block.className =
+        'stat ' +
+        cssClass;
+
+
+      const labelElement =
+        document.createElement(
+          'span'
+        );
+
+
+      labelElement.className =
+        'stat-label';
+
+
+      labelElement.textContent =
+        label;
+
+
+      const valueElement =
+        document.createElement(
+          'div'
+        );
+
+
+      valueElement.className =
+        'stat-value';
+
+
+      valueElement.textContent =
+        String(value);
+
+
+      block.append(
+        labelElement,
+        valueElement
+      );
+
+
+      return block;
+
+    }
+
+
+    /*
+    ============================================
+    PROGRAM
+    ============================================
+    */
+
+
+    function createProgramSection(
+      program
+    ) {
+
+      const section =
+        document.createElement(
+          'section'
+        );
+
+
+      const type =
+        program.type || '';
+
+
+      if(
+        type ===
+        'olympiad'
+      ) {
+
+        section.className =
+          'section olympiad';
+
+      }
+      else if(
+        type ===
+        'um'
+      ) {
+
+        section.className =
+          'section advanced';
+
+      }
+      else if(
+        type ===
+        'ag'
+      ) {
+
+        section.className =
+          'section ag';
+
+      }
+      else {
+
+        section.className =
+          'section';
+
+      }
+
+
+      const title =
+        document.createElement(
+          'h2'
+        );
+
+
+      title.className =
+        'section-title';
+
+
+      title.textContent =
+        program.label ||
+        'Программа';
+
+
+      section.appendChild(
+        title
+      );
+
+
+      let metaText =
+        '';
+
+
+      if(
+        type ===
+        'olympiad'
+      ) {
+
+        metaText =
+          program.stage || '';
+
+      }
+      else if(
+        hasValue(
+          program.classNumber
+        )
+      ) {
+
+        metaText =
+          program.classNumber +
+          ' класс';
+
+      }
+
+
+      if(metaText) {
+
+        const meta =
+          document.createElement(
+            'div'
+          );
+
+
+        meta.className =
+          'section-meta';
+
+
+        meta.textContent =
+          metaText;
+
+
+        section.appendChild(
+          meta
+        );
+
+      }
+
+
+      const line =
+        document.createElement(
+          'div'
+        );
+
+
+      line.className =
+        'section-line';
+
+
+      section.appendChild(
+        line
+      );
+
+
+      const cards =
+        document.createElement(
+          'div'
+        );
+
+
+      cards.className =
+        'cards';
+
+
+      const assessments =
+        Array.isArray(
+          program.assessments
+        )
+          ? program.assessments
+          : [];
+
+
+      const hasFinal =
+        !!program.finalAssessment;
+
+
+      const totalCards =
+        assessments.length +
+        (
+          hasFinal
+            ? 1
+            : 0
+        );
+
+
+      applyGridColumns(
+        cards,
+        totalCards
+      );
+
+
+      assessments.forEach(
+        function(assessment) {
+
+          const number =
+            assessment.number || '';
+
+
+          cards.appendChild(
+            createResultCard(
+              'Зачёт ' +
+              number,
+              assessment.status,
+              assessment.text
+            )
+          );
+
+        }
+      );
+
+
+      if(hasFinal) {
+
+        const finalAssessment =
+          program.finalAssessment;
+
+
+        cards.appendChild(
+          createResultCard(
+            'Итоговый срез',
+            finalAssessment.status,
+            finalAssessment.text
+          )
+        );
+
+      }
+
+
+      section.appendChild(
+        cards
+      );
+
+
+      return section;
+
+    }
+
+
+    /*
+    ============================================
+    PRACTICUMS
+    ============================================
+    */
+
+
+    function createPracticumsSection(
+      practicums
+    ) {
+
+      const section =
+        document.createElement(
+          'section'
+        );
+
+
+      section.className =
+        'section practicums';
+
+
+      const title =
+        document.createElement(
+          'h2'
+        );
+
+
+      title.className =
+        'section-title';
+
+
+      title.textContent =
+        'Математические практикумы';
+
+
+      const line =
+        document.createElement(
+          'div'
+        );
+
+
+      line.className =
+        'section-line';
+
+
+      const cards =
+        document.createElement(
+          'div'
+        );
+
+
+      cards.className =
+        'cards';
+
+
+      applyGridColumns(
+        cards,
+        practicums.length
+      );
+
+
+      practicums.forEach(
+        function(practicum) {
+
+          const number =
+            practicum.number || '';
+
+
+          cards.appendChild(
+            createResultCard(
+              'Практикум ' +
+              number,
+              'ready',
+              practicum.text || ''
+            )
+          );
+
+        }
+      );
+
+
+      section.append(
+        title,
+        line,
+        cards
+      );
+
+
+      return section;
+
+    }
+
+
+    /*
+    ============================================
+    GRID
+    ============================================
+    */
+
+
+    function applyGridColumns(
+      container,
+      count
+    ) {
+
+      let columns =
+        1;
+
+
+      if(
+        count >= 5
+      ) {
+
+        columns =
+          5;
+
+      }
+      else if(
+        count === 4
+      ) {
+
+        columns =
+          4;
+
+      }
+      else if(
+        count === 3
+      ) {
+
+        columns =
+          3;
+
+      }
+      else if(
+        count === 2
+      ) {
+
+        columns =
+          2;
+
+      }
+
+
+      container.style
+        .gridTemplateColumns =
+        'repeat(' +
+        columns +
+        ', minmax(0,1fr))';
+
+    }
+
+
+    /*
+    ============================================
+    RESULT CARD
+    ============================================
+    */
+
+
+    function createResultCard(
+      title,
+      status,
+      text
+    ) {
+
+      const card =
+        document.createElement(
+          'button'
+        );
+
+
+      card.type =
+        'button';
+
+
+      card.className =
+        'card';
+
+
+      const hasResult =
+        determineHasResult(
+          status,
+          text
+        );
+
+
+      if(hasResult) {
+
+        card.classList.add(
+          'ready'
+        );
+
+      }
+
+
+      const cardTitle =
+        document.createElement(
+          'div'
+        );
+
+
+      cardTitle.className =
+        'card-title';
+
+
+      cardTitle.textContent =
+        title;
+
+
+      const cardStatus =
+        document.createElement(
+          'div'
+        );
+
+
+      cardStatus.className =
+        'card-status';
+
+
+      cardStatus.textContent =
+        hasResult
+          ? 'Результат готов'
+          : 'Ещё не проходил';
+
+
+      card.append(
+        cardTitle,
+        cardStatus
+      );
+
+
+      card.addEventListener(
+        'click',
+        function() {
+
+          openResultDialog(
+            title,
+            text ||
+            'Зачёт ещё не проходил.'
+          );
+
+        }
+      );
+
+
+      return card;
+
+    }
+
+
+    function determineHasResult(
+      status,
+      text
+    ) {
+
+      const normalizedStatus =
+        String(
+          status || ''
+        )
+        .trim()
+        .toLowerCase();
+
+
+      if(
+        normalizedStatus === 'ready' ||
+        normalizedStatus === 'done' ||
+        normalizedStatus === 'completed' ||
+        normalizedStatus === 'result'
+      ) {
+
+        return true;
+
+      }
+
+
+      const normalizedText =
+        String(
+          text || ''
+        )
+        .trim()
+        .toLowerCase();
+
+
+      if(
+        !normalizedText
+      ) {
+
+        return false;
+
+      }
+
+
+      if(
+        normalizedText.includes(
+          'ещё не проходил'
+        ) ||
+        normalizedText.includes(
+          'еще не проходил'
+        )
+      ) {
+
+        return false;
+
+      }
+
+
+      return true;
+
+    }
+
+
+    /*
+    ============================================
+    RESULT MODAL
+    ============================================
+    */
+
+
+    function openResultDialog(
+      title,
+      text
+    ) {
+
+      dialogTitle.textContent =
+        title;
+
+
+      renderTextWithLinks(
+        dialogContent,
+        text
+      );
+
+
+      dialog.showModal();
+
+    }
+
+
+    function renderTextWithLinks(
+      container,
+      text
+    ) {
+
+      container.replaceChildren();
+
+
+      const value =
+        String(
+          text || ''
+        );
+
+
+      const urlRegex =
+        /(https?:\/\/[^\s]+)/g;
+
+
+      const parts =
+        value.split(
+          urlRegex
+        );
+
+
+      parts.forEach(
+        function(part) {
+
+          if(
+            /^https?:\/\//i
+              .test(part)
+          ) {
+
+            const link =
+              document.createElement(
+                'a'
+              );
+
+
+            link.href =
+              part;
+
+
+            link.target =
+              '_blank';
+
+
+            link.rel =
+              'noopener noreferrer';
+
+
+            link.textContent =
+              part;
+
+
+            container.appendChild(
+              link
+            );
+
+          }
+          else {
+
+            container.appendChild(
+              document.createTextNode(
+                part
+              )
+            );
+
+          }
+
+        }
+      );
+
+    }
+
+
+    closeDialog.addEventListener(
+      'click',
+      function() {
+
+        dialog.close();
+
+      }
+    );
+
+
+    dialog.addEventListener(
+      'click',
+      function(event) {
+
+        if(
+          event.target ===
+          dialog
+        ) {
+
+          dialog.close();
+
+        }
+
+      }
+    );
+
+
+    /*
+    ============================================
+    LOGOUT
+    ============================================
+    */
+
+
+    logoutButton.addEventListener(
+      'click',
+      function() {
+
+        showLogin();
+
+
+        accessCodeInput.value =
+          '';
+
+
+        loginError.textContent =
+          '';
+
+
+        studentName.textContent =
+          '';
+
+
+        stats.replaceChildren();
+
+
+        content.replaceChildren();
+
+
+        accessCodeInput.focus();
+
+      }
+    );
+
+
+    /*
+    ============================================
+    SCREEN SWITCH
+    ============================================
+    */
+
+
+    function showCabinet() {
+
+      loginScreen.hidden =
+        true;
+
+
+      cabinetScreen.hidden =
+        false;
+
+
+      window.scrollTo(
+        0,
+        0
+      );
+
+    }
+
+
+    function showLogin() {
+
+      cabinetScreen.hidden =
+        true;
+
+
+      loginScreen.hidden =
+        false;
+
+
+      window.scrollTo(
+        0,
+        0
+      );
+
+    }
+
+
+    /*
+    ============================================
+    LOADING
+    ============================================
+    */
+
+
+    function setLoading(
+      isLoading
+    ) {
+
+      loginButton.disabled =
+        isLoading;
+
+
+      accessCodeInput.disabled =
+        isLoading;
+
+
+      loginButton.textContent =
+        isLoading
+          ? 'Входим…'
+          : 'Войти';
+
+    }
+
+
+    /*
+    ============================================
+    CODE INPUT
+    ============================================
+    */
+
+
+    accessCodeInput.addEventListener(
+      'input',
+      function() {
+
+        accessCodeInput.value =
+          accessCodeInput
+            .value
+            .replace(
+              /\D/g,
+              ''
+            )
+            .slice(
+              0,
+              8
+            );
+
+
+        loginError.textContent =
+          '';
+
+      }
+    );
+
+
+  </script>
+
+
+</body>
+
+</html>
