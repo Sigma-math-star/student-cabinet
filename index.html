@@ -80,10 +80,6 @@
       letter-spacing:-.02em;
     }
 
-    /*
-    LOGIN
-    */
-
     .login-wrap{
       min-height:calc(100vh - 120px);
       display:flex;
@@ -168,10 +164,6 @@
       line-height:1.45;
     }
 
-    /*
-    HERO
-    */
-
     .hero{
       padding:28px 30px 24px;
       background:var(--purple);
@@ -204,10 +196,6 @@
       border-radius:10px;
       font-weight:600;
     }
-
-    /*
-    STATS
-    */
 
     .stats{
       display:flex;
@@ -246,10 +234,6 @@
       font-size:22px;
       font-weight:800;
     }
-
-    /*
-    CONTENT
-    */
 
     .content{
       margin-top:18px;
@@ -305,10 +289,6 @@
     .practicums .section-line{
       background:var(--orange);
     }
-
-    /*
-    CARDS
-    */
 
     .cards{
       display:grid;
@@ -376,10 +356,6 @@
       color:var(--orange);
     }
 
-    /*
-    MODAL
-    */
-
     dialog{
       width:min(
         660px,
@@ -443,9 +419,14 @@
       font-weight:600;
     }
 
-    /*
-    MOBILE
-    */
+    .bridge-frame{
+      position:absolute;
+      width:1px;
+      height:1px;
+      left:-9999px;
+      top:-9999px;
+      border:0;
+    }
 
     @media(max-width:900px){
 
@@ -520,9 +501,6 @@
     </div>
 
 
-    <!-- LOGIN -->
-
-
     <section
       id="loginScreen"
       class="login-wrap"
@@ -594,9 +572,6 @@
     </section>
 
 
-    <!-- CABINET -->
-
-
     <section
       id="cabinetScreen"
       hidden
@@ -648,9 +623,6 @@
   </main>
 
 
-  <!-- MODAL -->
-
-
   <dialog id="dialog">
 
 
@@ -691,29 +663,64 @@
   </dialog>
 
 
+  <!--
+  Только для POST входа.
+  Ответ Apps Script из iframe нам вообще не нужен.
+  -->
+
+
+  <iframe
+    id="loginTransportFrame"
+    name="loginTransportFrame"
+    class="bridge-frame"
+    title="Служебный канал входа"
+  ></iframe>
+
+
+  <form
+    id="loginTransportForm"
+    method="POST"
+    target="loginTransportFrame"
+    action="https://script.google.com/macros/s/AKfycbz5jhbsj2t8mRr237NJals3BB7YGt2MbJgCRKZLDwxpRp2yH6NpDBSpRGqR2sX71r-X/exec"
+    hidden
+  >
+
+    <input
+      name="action"
+      type="hidden"
+      value="login"
+    >
+
+    <input
+      id="transportAccessCode"
+      name="accessCode"
+      type="hidden"
+    >
+
+    <input
+      id="transportClientId"
+      name="clientId"
+      type="hidden"
+    >
+
+    <input
+      id="transportRequestId"
+      name="requestId"
+      type="hidden"
+    >
+
+  </form>
+
+
   <script>
-
-
-    /*
-    ============================================
-    BACKEND
-    ============================================
-    */
 
 
     const API_URL =
       'https://script.google.com/macros/s/AKfycbz5jhbsj2t8mRr237NJals3BB7YGt2MbJgCRKZLDwxpRp2yH6NpDBSpRGqR2sX71r-X/exec';
 
 
-    const CALLBACK_NAME =
-      'sigmaLoginCallback';
-
-
-    /*
-    ============================================
-    DOM
-    ============================================
-    */
+    const POLL_CALLBACK =
+      'sigmaPollCallback';
 
 
     const loginScreen =
@@ -800,22 +807,32 @@
       );
 
 
-    /*
-    ============================================
-    JSONP STATE
-    ============================================
-    */
+    const loginTransportForm =
+      document.getElementById(
+        'loginTransportForm'
+      );
 
 
-    let pendingJsonp =
+    const transportAccessCode =
+      document.getElementById(
+        'transportAccessCode'
+      );
+
+
+    const transportClientId =
+      document.getElementById(
+        'transportClientId'
+      );
+
+
+    const transportRequestId =
+      document.getElementById(
+        'transportRequestId'
+      );
+
+
+    let activeLogin =
       null;
-
-
-    /*
-    ============================================
-    CLIENT ID
-    ============================================
-    */
 
 
     function getClientId() {
@@ -870,14 +887,10 @@
     }
 
 
-    /*
-    ============================================
-    REQUEST ID
-    ============================================
-    */
-
-
     function createRequestId() {
+
+
+      let base;
 
 
       if(
@@ -886,107 +899,41 @@
         'function'
       ) {
 
-        return crypto.randomUUID();
+        base =
+          crypto.randomUUID();
+
+      }
+      else {
+
+        base =
+          (
+            Date.now() +
+            '-' +
+            Math.random()
+              .toString(36)
+              .slice(2)
+          );
 
       }
 
 
       return (
-        'req-' +
-        Date.now() +
-        '-' +
-        Math.random()
-          .toString(36)
-          .slice(2)
+        'req_' +
+        base
+          .replace(
+            /[^A-Za-z0-9_-]/g,
+            ''
+          )
       );
 
     }
 
 
-    /*
-    ============================================
-    GLOBAL JSONP CALLBACK
-    ============================================
-    */
-
-
-    window[CALLBACK_NAME] =
-      function(payload) {
-
-
-        if(
-          !pendingJsonp
-        ) {
-
-          return;
-
-        }
-
-
-        if(
-          !payload ||
-          payload.type !==
-          'sigma-lk-response'
-        ) {
-
-          return;
-
-        }
-
-
-        if(
-          payload.requestId !==
-          pendingJsonp.requestId
-        ) {
-
-          return;
-
-        }
-
-
-        clearTimeout(
-          pendingJsonp.timeout
-        );
-
-
-        if(
-          pendingJsonp.script &&
-          pendingJsonp.script.parentNode
-        ) {
-
-          pendingJsonp.script.parentNode
-            .removeChild(
-              pendingJsonp.script
-            );
-
-        }
-
-
-        const resolve =
-          pendingJsonp.resolve;
-
-
-        pendingJsonp =
-          null;
-
-
-        resolve(
-          payload.result
-        );
-
-      };
-
-
-    /*
-    ============================================
-    LOGIN FORM
-    ============================================
-    */
-
-
     loginForm.addEventListener(
       'submit',
-      async event => {
+      async function(
+        event
+      ) {
 
 
         event.preventDefault();
@@ -1017,6 +964,15 @@
         }
 
 
+        if(
+          activeLogin
+        ) {
+
+          return;
+
+        }
+
+
         setLoading(
           true
         );
@@ -1025,10 +981,47 @@
         try {
 
 
+          const requestId =
+            createRequestId();
+
+
+          activeLogin = {
+
+            requestId:
+              requestId
+
+          };
+
+
+          /*
+          POST кода.
+          */
+
+
+          transportAccessCode.value =
+            code;
+
+
+          transportClientId.value =
+            getClientId();
+
+
+          transportRequestId.value =
+            requestId;
+
+
+          loginTransportForm.submit();
+
+
+          /*
+          После отправки начинаем ждать
+          готовый ответ.
+          */
+
+
           const result =
-            await loginViaJsonp(
-              code,
-              getClientId()
+            await waitForLoginResult(
+              requestId
             );
 
 
@@ -1083,6 +1076,10 @@
         finally {
 
 
+          activeLogin =
+            null;
+
+
           setLoading(
             false
           );
@@ -1095,14 +1092,13 @@
 
     /*
     ============================================
-    JSONP LOGIN
+    POLLING
     ============================================
     */
 
 
-    function loginViaJsonp(
-      accessCode,
-      clientId
+    function waitForLoginResult(
+      requestId
     ) {
 
 
@@ -1113,214 +1109,321 @@
         ) {
 
 
-          /*
-          Один запрос за раз
-          */
+          const startedAt =
+            Date.now();
 
 
-          if(
-            pendingJsonp
-          ) {
+          let timer =
+            null;
 
-            reject(
-              new Error(
-                'Уже выполняется запрос.'
-              )
-            );
 
-            return;
+          let currentScript =
+            null;
+
+
+          let waitingCallback =
+            false;
+
+
+          function cleanup() {
+
+
+            if(
+              timer
+            ) {
+
+              clearTimeout(
+                timer
+              );
+
+              timer =
+                null;
+
+            }
+
+
+            if(
+              currentScript &&
+              currentScript.parentNode
+            ) {
+
+              currentScript.parentNode
+                .removeChild(
+                  currentScript
+                );
+
+            }
+
+
+            currentScript =
+              null;
+
+
+            window[
+              POLL_CALLBACK
+            ] =
+              function() {};
 
           }
 
 
-          const requestId =
-            createRequestId();
+          function fail(
+            message
+          ) {
 
 
-          const url =
-            new URL(
-              API_URL
+            cleanup();
+
+
+            reject(
+              new Error(
+                message
+              )
             );
 
-
-          url.searchParams.set(
-            'action',
-            'login'
-          );
+          }
 
 
-          url.searchParams.set(
-            'accessCode',
-            accessCode
-          );
+          function scheduleNext() {
 
 
-          url.searchParams.set(
-            'clientId',
-            clientId
-          );
+            timer =
+              setTimeout(
+                pollOnce,
+                650
+              );
+
+          }
 
 
-          url.searchParams.set(
-            'requestId',
-            requestId
-          );
+          window[
+            POLL_CALLBACK
+          ] =
+            function(
+              payload
+            ) {
 
 
-          url.searchParams.set(
-            'callback',
-            CALLBACK_NAME
-          );
-
-
-          /*
-          Антикэш-параметр
-          */
-
-
-          url.searchParams.set(
-            '_',
-            String(
-              Date.now()
-            )
-          );
-
-
-          const script =
-            document.createElement(
-              'script'
-            );
-
-
-          script.async =
-            true;
-
-
-          script.src =
-            url.toString();
-
-
-          /*
-          Ошибка загрузки
-          */
-
-
-          script.onerror =
-            function() {
+              waitingCallback =
+                false;
 
 
               if(
-                !pendingJsonp ||
-                pendingJsonp.requestId !==
-                requestId
+                currentScript &&
+                currentScript.parentNode
               ) {
+
+                currentScript.parentNode
+                  .removeChild(
+                    currentScript
+                  );
+
+              }
+
+
+              currentScript =
+                null;
+
+
+              if(
+                !payload
+              ) {
+
+                scheduleNext();
 
                 return;
 
               }
 
 
-              clearTimeout(
-                pendingJsonp.timeout
-              );
-
-
               if(
-                script.parentNode
+                payload.pending ===
+                true
               ) {
 
-                script.parentNode
-                  .removeChild(
-                    script
-                  );
-
-              }
-
-
-              pendingJsonp =
-                null;
-
-
-              reject(
-                new Error(
-                  'Не удалось загрузить ответ Apps Script.'
-                )
-              );
-
-            };
-
-
-          /*
-          Timeout
-          */
-
-
-          const timeout =
-            setTimeout(
-              function() {
-
-
                 if(
-                  !pendingJsonp ||
-                  pendingJsonp.requestId !==
-                  requestId
+                  Date.now() -
+                  startedAt >
+                  30000
                 ) {
+
+                  fail(
+                    'Истекло время ожидания ответа.'
+                  );
 
                   return;
 
                 }
 
 
+                scheduleNext();
+
+                return;
+
+              }
+
+
+              if(
+                payload.pending ===
+                false
+              ) {
+
+
+                const result =
+                  payload.result;
+
+
+                cleanup();
+
+
+                resolve(
+                  result
+                );
+
+
+                return;
+
+              }
+
+
+              scheduleNext();
+
+            };
+
+
+          function pollOnce() {
+
+
+            if(
+              Date.now() -
+              startedAt >
+              30000
+            ) {
+
+              fail(
+                'Истекло время ожидания ответа.'
+              );
+
+              return;
+
+            }
+
+
+            if(
+              waitingCallback
+            ) {
+
+              return;
+
+            }
+
+
+            waitingCallback =
+              true;
+
+
+            const url =
+              new URL(
+                API_URL
+              );
+
+
+            url.searchParams.set(
+              'action',
+              'poll'
+            );
+
+
+            url.searchParams.set(
+              'requestId',
+              requestId
+            );
+
+
+            url.searchParams.set(
+              'callback',
+              POLL_CALLBACK
+            );
+
+
+            url.searchParams.set(
+              '_',
+              String(
+                Date.now()
+              )
+            );
+
+
+            currentScript =
+              document.createElement(
+                'script'
+              );
+
+
+            currentScript.async =
+              true;
+
+
+            currentScript.src =
+              url.toString();
+
+
+            currentScript.onerror =
+              function() {
+
+
+                waitingCallback =
+                  false;
+
+
                 if(
-                  script.parentNode
+                  currentScript &&
+                  currentScript.parentNode
                 ) {
 
-                  script.parentNode
+                  currentScript.parentNode
                     .removeChild(
-                      script
+                      currentScript
                     );
 
                 }
 
 
-                pendingJsonp =
+                currentScript =
                   null;
 
 
-                reject(
-                  new Error(
-                    'Истекло время ожидания ответа.'
-                  )
-                );
+                /*
+                Сетевой сбой одного poll
+                не ломает весь вход.
+                Попробуем ещё раз.
+                */
 
-              },
-              20000
+
+                scheduleNext();
+
+              };
+
+
+            document.head
+              .appendChild(
+                currentScript
+              );
+
+          }
+
+
+          /*
+          Даём POST немного времени стартовать,
+          потом первый poll.
+          */
+
+
+          timer =
+            setTimeout(
+              pollOnce,
+              250
             );
-
-
-          pendingJsonp = {
-
-            requestId:
-              requestId,
-
-            resolve:
-              resolve,
-
-            reject:
-              reject,
-
-            script:
-              script,
-
-            timeout:
-              timeout
-
-          };
-
-
-          document.head.appendChild(
-            script
-          );
 
         }
       );
@@ -1362,7 +1465,9 @@
 
 
       programs.forEach(
-        function(program) {
+        function(
+          program
+        ) {
 
           content.appendChild(
             createProgramSection(
@@ -1471,8 +1576,10 @@
     ) {
 
       return !(
-        value === '' ||
-        value === null ||
+        value === ''
+        ||
+        value === null
+        ||
         value === undefined
       );
 
@@ -1540,7 +1647,7 @@
 
     /*
     ============================================
-    PROGRAM
+    PROGRAMS
     ============================================
     */
 
@@ -1890,8 +1997,7 @@
 
 
       if(
-        count >=
-        5
+        count >= 5
       ) {
 
         columns =
@@ -1899,8 +2005,7 @@
 
       }
       else if(
-        count ===
-        4
+        count === 4
       ) {
 
         columns =
@@ -1908,8 +2013,7 @@
 
       }
       else if(
-        count ===
-        3
+        count === 3
       ) {
 
         columns =
@@ -1917,8 +2021,7 @@
 
       }
       else if(
-        count ===
-        2
+        count === 2
       ) {
 
         columns =
@@ -2053,14 +2156,13 @@
 
 
       if(
-        normalizedStatus ===
-          'ready' ||
-        normalizedStatus ===
-          'done' ||
-        normalizedStatus ===
-          'completed' ||
-        normalizedStatus ===
-          'result'
+        normalizedStatus === 'ready'
+        ||
+        normalizedStatus === 'done'
+        ||
+        normalizedStatus === 'completed'
+        ||
+        normalizedStatus === 'result'
       ) {
 
         return true;
@@ -2089,7 +2191,8 @@
       if(
         normalizedText.includes(
           'ещё не проходил'
-        ) ||
+        )
+        ||
         normalizedText.includes(
           'еще не проходил'
         )
