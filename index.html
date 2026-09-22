@@ -73,68 +73,49 @@
 
     .brand{
       margin-bottom:18px;
-
       color:var(--purple);
-
       font-family:'Unbounded',sans-serif;
       font-size:22px;
       font-weight:800;
-
       letter-spacing:-.02em;
     }
 
-    /*
-    LOGIN
-    */
-
     .login-wrap{
       min-height:calc(100vh - 120px);
-
       display:flex;
       align-items:center;
       justify-content:center;
-
       padding:30px 0 80px;
     }
 
     .login-card{
       width:min(560px,100%);
-
       padding:34px;
-
       background:var(--white);
-
       border:1px solid var(--gray);
       border-radius:22px;
     }
 
     .login-title{
       margin:0;
-
       color:var(--black);
-
       font-family:'Unbounded',sans-serif;
       font-size:clamp(30px,5vw,42px);
       font-weight:800;
-
       line-height:1.08;
       letter-spacing:-.035em;
     }
 
     .login-text{
       margin:14px 0 24px;
-
       color:var(--muted);
-
       font-size:15px;
       line-height:1.55;
     }
 
     .code-label{
       display:block;
-
       margin-bottom:8px;
-
       font-size:14px;
       font-weight:700;
     }
@@ -142,20 +123,14 @@
     .code-input{
       width:100%;
       height:58px;
-
       padding:0 16px;
-
       color:var(--black);
       background:var(--white);
-
       border:1.5px solid var(--gray);
       border-radius:14px;
-
       outline:none;
-
       font-size:22px;
       font-weight:700;
-
       letter-spacing:.08em;
     }
 
@@ -166,16 +141,12 @@
     .login-button{
       width:100%;
       min-height:54px;
-
       margin-top:12px;
       padding:12px 18px;
-
       background:var(--purple);
       color:var(--white);
-
       border:0;
       border-radius:14px;
-
       font-weight:800;
     }
 
@@ -186,83 +157,57 @@
 
     .login-error{
       min-height:22px;
-
       margin-top:14px;
-
       color:var(--red);
-
       font-size:14px;
       font-weight:600;
       line-height:1.45;
     }
 
-    /*
-    HERO
-    */
-
     .hero{
       padding:28px 30px 24px;
-
       background:var(--purple);
       color:var(--white);
-
       border-radius:22px;
     }
 
     .hero-top{
       display:flex;
-
       align-items:flex-start;
       justify-content:space-between;
-
       gap:20px;
     }
 
     .student-name{
       margin:0;
-
       font-family:'Unbounded',sans-serif;
       font-size:clamp(38px,5vw,54px);
       font-weight:800;
-
       line-height:1.02;
       letter-spacing:-.04em;
     }
 
     .logout{
       flex:0 0 auto;
-
       padding:9px 14px;
-
       color:var(--white);
       background:transparent;
-
       border:1px solid var(--white);
       border-radius:10px;
-
       font-weight:600;
     }
-
-    /*
-    STATS
-    */
 
     .stats{
       display:flex;
       flex-wrap:wrap;
-
       gap:10px;
-
       margin-top:24px;
     }
 
     .stat{
       min-width:145px;
-
       padding:13px 16px;
-
       color:var(--black);
-
       border-radius:14px;
     }
 
@@ -280,11 +225,8 @@
 
     .stat-label{
       display:block;
-
       margin-bottom:3px;
-
       opacity:.7;
-
       font-size:13px;
     }
 
@@ -293,17 +235,10 @@
       font-weight:800;
     }
 
-    /*
-    CONTENT
-    */
-
     .content{
       margin-top:18px;
-
       padding:28px;
-
       background:var(--white);
-
       border:1px solid var(--gray);
       border-radius:22px;
     }
@@ -318,20 +253,16 @@
 
     .section-title{
       margin:0;
-
       font-family:'Unbounded',sans-serif;
       font-size:24px;
       font-weight:800;
-
       line-height:1.14;
       letter-spacing:-.02em;
     }
 
     .section-meta{
       margin-top:4px;
-
       color:var(--muted);
-
       font-size:15px;
       font-weight:600;
     }
@@ -339,9 +270,7 @@
     .section-line{
       width:62px;
       height:5px;
-
       margin:10px 0 14px;
-
       border-radius:999px;
     }
 
@@ -361,26 +290,17 @@
       background:var(--orange);
     }
 
-    /*
-    CARDS
-    */
-
     .cards{
       display:grid;
-
       gap:10px;
     }
 
     .card{
       min-height:94px;
-
       padding:15px;
-
       background:var(--white);
-
       border:1px solid var(--gray);
       border-radius:14px;
-
       text-align:left;
     }
 
@@ -406,14 +326,12 @@
 
     .card-title{
       margin-bottom:6px;
-
       font-size:16px;
       font-weight:800;
     }
 
     .card-status{
       color:#777;
-
       font-size:13px;
       line-height:1.35;
     }
@@ -422,33 +340,21 @@
       font-weight:700;
     }
 
-    .olympiad
-    .card.ready
-    .card-status{
+    .olympiad .card.ready .card-status{
       color:var(--purple);
     }
 
-    .advanced
-    .card.ready
-    .card-status{
+    .advanced .card.ready .card-status{
       color:var(--green);
     }
 
-    .ag
-    .card.ready
-    .card-status{
+    .ag .card.ready .card-status{
       color:var(--blue);
     }
 
-    .practicums
-    .card.ready
-    .card-status{
+    .practicums .card.ready .card-status{
       color:var(--orange);
     }
-
-    /*
-    MODAL
-    */
 
     dialog{
       width:min(
@@ -457,10 +363,8 @@
       );
 
       padding:0;
-
       border:0;
       border-radius:18px;
-
       box-shadow:
         0 20px 60px
         rgba(0,0,0,.18);
@@ -473,52 +377,39 @@
 
     .modal{
       padding:24px;
-
       background:var(--white);
     }
 
     .modal-head{
       display:flex;
-
       align-items:flex-start;
       justify-content:space-between;
-
       gap:16px;
-
       margin-bottom:14px;
     }
 
     .modal-title{
       margin:0;
-
       font-family:'Unbounded',sans-serif;
       font-size:22px;
       font-weight:800;
-
       line-height:1.2;
     }
 
     .close{
       flex:0 0 auto;
-
       width:34px;
       height:34px;
-
       padding:0;
-
       background:var(--gray);
-
       border:0;
       border-radius:50%;
-
       font-size:20px;
     }
 
     .modal-content{
       white-space:pre-wrap;
-
       line-height:1.65;
-
       overflow-wrap:anywhere;
     }
 
@@ -527,25 +418,14 @@
       font-weight:600;
     }
 
-    /*
-    HIDDEN APPS SCRIPT BRIDGE
-    */
-
     .bridge-frame{
       position:absolute;
-
       width:1px;
       height:1px;
-
       left:-9999px;
       top:-9999px;
-
       border:0;
     }
-
-    /*
-    MOBILE
-    */
 
     @media(max-width:900px){
 
@@ -564,7 +444,6 @@
 
       .page{
         width:calc(100% - 16px);
-
         padding-top:16px;
       }
 
@@ -600,7 +479,6 @@
 
       .stat{
         min-width:0;
-
         flex:1 1 30%;
       }
 
@@ -618,13 +496,8 @@
 
 
     <div class="brand">
-
       Сигма · Личный кабинет
-
     </div>
-
-
-    <!-- LOGIN SCREEN -->
 
 
     <section
@@ -637,17 +510,12 @@
 
 
         <h1 class="login-title">
-
           Войти в личный кабинет
-
         </h1>
 
 
         <p class="login-text">
-
-          Введите ваш
-          8-значный код доступа.
-
+          Введите ваш 8-значный код доступа.
         </p>
 
 
@@ -661,9 +529,7 @@
             class="code-label"
             for="accessCode"
           >
-
             Код доступа
-
           </label>
 
 
@@ -685,9 +551,7 @@
             class="login-button"
             type="submit"
           >
-
             Войти
-
           </button>
 
 
@@ -705,9 +569,6 @@
 
 
     </section>
-
-
-    <!-- CABINET SCREEN -->
 
 
     <section
@@ -733,9 +594,7 @@
             class="logout"
             type="button"
           >
-
             Выйти
-
           </button>
 
 
@@ -763,9 +622,6 @@
   </main>
 
 
-  <!-- RESULT DIALOG -->
-
-
   <dialog id="dialog">
 
 
@@ -787,9 +643,7 @@
           type="button"
           aria-label="Закрыть"
         >
-
           ×
-
         </button>
 
 
@@ -806,11 +660,6 @@
 
 
   </dialog>
-
-
-  <!--
-    HIDDEN FORM BRIDGE TO APPS SCRIPT
-  -->
 
 
   <iframe
@@ -866,26 +715,14 @@
   <script>
 
 
-    /*
-    ============================================
-    CONSTANTS
-    ============================================
-    */
-
-
-    const APPS_SCRIPT_ORIGIN =
-      'https://script.google.com';
+    const APPS_SCRIPT_ALLOWED_ORIGINS = [
+      'https://script.google.com',
+      'https://script.googleusercontent.com'
+    ];
 
 
     const RESPONSE_TYPE =
       'sigma-lk-response';
-
-
-    /*
-    ============================================
-    DOM
-    ============================================
-    */
 
 
     const loginScreen =
@@ -1002,24 +839,12 @@
       );
 
 
-    /*
-    ============================================
-    LOGIN REQUEST STATE
-    ============================================
-    */
-
-
-    let pendingRequest = null;
-
-
-    /*
-    ============================================
-    CLIENT ID
-    ============================================
-    */
+    let pendingRequest =
+      null;
 
 
     function getClientId() {
+
 
       let clientId =
         localStorage.getItem(
@@ -1028,7 +853,9 @@
 
 
       if(clientId) {
+
         return clientId;
+
       }
 
 
@@ -1066,14 +893,8 @@
     }
 
 
-    /*
-    ============================================
-    REQUEST ID
-    ============================================
-    */
-
-
     function createRequestId() {
+
 
       if(
         window.crypto &&
@@ -1098,16 +919,10 @@
     }
 
 
-    /*
-    ============================================
-    LOGIN SUBMIT
-    ============================================
-    */
-
-
     loginForm.addEventListener(
       'submit',
       async event => {
+
 
         event.preventDefault();
 
@@ -1137,7 +952,9 @@
         }
 
 
-        setLoading(true);
+        setLoading(
+          true
+        );
 
 
         try {
@@ -1198,19 +1015,14 @@
         }
         finally {
 
-          setLoading(false);
+          setLoading(
+            false
+          );
 
         }
 
       }
     );
-
-
-    /*
-    ============================================
-    APPS SCRIPT BRIDGE
-    ============================================
-    */
 
 
     function loginThroughBridge(
@@ -1219,9 +1031,15 @@
     ) {
 
       return new Promise(
-        function(resolve,reject) {
+        function(
+          resolve,
+          reject
+        ) {
 
-          if(pendingRequest) {
+
+          if(
+            pendingRequest
+          ) {
 
             reject(
               new Error(
@@ -1248,7 +1066,8 @@
                   requestId
                 ) {
 
-                  pendingRequest = null;
+                  pendingRequest =
+                    null;
 
 
                   reject(
@@ -1265,6 +1084,7 @@
 
 
           pendingRequest = {
+
             requestId:
               requestId,
 
@@ -1276,6 +1096,7 @@
 
             timeout:
               timeout
+
           };
 
 
@@ -1303,20 +1124,15 @@
     }
 
 
-    /*
-    ============================================
-    RECEIVE APPS SCRIPT RESPONSE
-    ============================================
-    */
-
-
     window.addEventListener(
       'message',
       function(event) {
 
+
         if(
-          event.origin !==
-          APPS_SCRIPT_ORIGIN
+          !APPS_SCRIPT_ALLOWED_ORIGINS.includes(
+            event.origin
+          )
         ) {
 
           return;
@@ -1379,16 +1195,10 @@
     );
 
 
-    /*
-    ============================================
-    CABINET
-    ============================================
-    */
-
-
     function renderCabinet(
       cabinet
     ) {
+
 
       studentName.textContent =
         cabinet.name || '';
@@ -1432,7 +1242,8 @@
 
 
       if(
-        practicums.length > 0
+        practicums.length >
+        0
       ) {
 
         content.appendChild(
@@ -1446,16 +1257,10 @@
     }
 
 
-    /*
-    ============================================
-    STATS
-    ============================================
-    */
-
-
     function renderStats(
       cabinet
     ) {
+
 
       stats.replaceChildren();
 
@@ -1532,6 +1337,7 @@
       cssClass
     ) {
 
+
       const block =
         document.createElement(
           'div'
@@ -1568,7 +1374,9 @@
 
 
       valueElement.textContent =
-        String(value);
+        String(
+          value
+        );
 
 
       block.append(
@@ -1582,16 +1390,10 @@
     }
 
 
-    /*
-    ============================================
-    PROGRAM
-    ============================================
-    */
-
-
     function createProgramSection(
       program
     ) {
+
 
       const section =
         document.createElement(
@@ -1600,7 +1402,8 @@
 
 
       const type =
-        program.type || '';
+        program.type ||
+        '';
 
 
       if(
@@ -1668,7 +1471,8 @@
       ) {
 
         metaText =
-          program.stage || '';
+          program.stage ||
+          '';
 
       }
       else if(
@@ -1684,7 +1488,9 @@
       }
 
 
-      if(metaText) {
+      if(
+        metaText
+      ) {
 
         const meta =
           document.createElement(
@@ -1760,10 +1566,14 @@
 
 
       assessments.forEach(
-        function(assessment) {
+        function(
+          assessment
+        ) {
+
 
           const number =
-            assessment.number || '';
+            assessment.number ||
+            '';
 
 
           cards.appendChild(
@@ -1779,7 +1589,9 @@
       );
 
 
-      if(hasFinal) {
+      if(
+        hasFinal
+      ) {
 
         const finalAssessment =
           program.finalAssessment;
@@ -1806,16 +1618,10 @@
     }
 
 
-    /*
-    ============================================
-    PRACTICUMS
-    ============================================
-    */
-
-
     function createPracticumsSection(
       practicums
     ) {
+
 
       const section =
         document.createElement(
@@ -1868,10 +1674,14 @@
 
 
       practicums.forEach(
-        function(practicum) {
+        function(
+          practicum
+        ) {
+
 
           const number =
-            practicum.number || '';
+            practicum.number ||
+            '';
 
 
           cards.appendChild(
@@ -1879,7 +1689,8 @@
               'Практикум ' +
               number,
               'ready',
-              practicum.text || ''
+              practicum.text ||
+              ''
             )
           );
 
@@ -1899,24 +1710,19 @@
     }
 
 
-    /*
-    ============================================
-    GRID
-    ============================================
-    */
-
-
     function applyGridColumns(
       container,
       count
     ) {
+
 
       let columns =
         1;
 
 
       if(
-        count >= 5
+        count >=
+        5
       ) {
 
         columns =
@@ -1924,7 +1730,8 @@
 
       }
       else if(
-        count === 4
+        count ===
+        4
       ) {
 
         columns =
@@ -1932,7 +1739,8 @@
 
       }
       else if(
-        count === 3
+        count ===
+        3
       ) {
 
         columns =
@@ -1940,7 +1748,8 @@
 
       }
       else if(
-        count === 2
+        count ===
+        2
       ) {
 
         columns =
@@ -1958,18 +1767,12 @@
     }
 
 
-    /*
-    ============================================
-    RESULT CARD
-    ============================================
-    */
-
-
     function createResultCard(
       title,
       status,
       text
     ) {
+
 
       const card =
         document.createElement(
@@ -1992,7 +1795,9 @@
         );
 
 
-      if(hasResult) {
+      if(
+        hasResult
+      ) {
 
         card.classList.add(
           'ready'
@@ -2061,19 +1866,25 @@
       text
     ) {
 
+
       const normalizedStatus =
         String(
-          status || ''
+          status ||
+          ''
         )
         .trim()
         .toLowerCase();
 
 
       if(
-        normalizedStatus === 'ready' ||
-        normalizedStatus === 'done' ||
-        normalizedStatus === 'completed' ||
-        normalizedStatus === 'result'
+        normalizedStatus ===
+          'ready' ||
+        normalizedStatus ===
+          'done' ||
+        normalizedStatus ===
+          'completed' ||
+        normalizedStatus ===
+          'result'
       ) {
 
         return true;
@@ -2083,7 +1894,8 @@
 
       const normalizedText =
         String(
-          text || ''
+          text ||
+          ''
         )
         .trim()
         .toLowerCase();
@@ -2117,17 +1929,11 @@
     }
 
 
-    /*
-    ============================================
-    RESULT MODAL
-    ============================================
-    */
-
-
     function openResultDialog(
       title,
       text
     ) {
+
 
       dialogTitle.textContent =
         title;
@@ -2149,12 +1955,14 @@
       text
     ) {
 
+
       container.replaceChildren();
 
 
       const value =
         String(
-          text || ''
+          text ||
+          ''
         );
 
 
@@ -2169,11 +1977,16 @@
 
 
       parts.forEach(
-        function(part) {
+        function(
+          part
+        ) {
+
 
           if(
             /^https?:\/\//i
-              .test(part)
+              .test(
+                part
+              )
           ) {
 
             const link =
@@ -2231,7 +2044,9 @@
 
     dialog.addEventListener(
       'click',
-      function(event) {
+      function(
+        event
+      ) {
 
         if(
           event.target ===
@@ -2246,16 +2061,10 @@
     );
 
 
-    /*
-    ============================================
-    LOGOUT
-    ============================================
-    */
-
-
     logoutButton.addEventListener(
       'click',
       function() {
+
 
         showLogin();
 
@@ -2284,14 +2093,8 @@
     );
 
 
-    /*
-    ============================================
-    SCREEN SWITCH
-    ============================================
-    */
-
-
     function showCabinet() {
+
 
       loginScreen.hidden =
         true;
@@ -2311,6 +2114,7 @@
 
     function showLogin() {
 
+
       cabinetScreen.hidden =
         true;
 
@@ -2327,16 +2131,10 @@
     }
 
 
-    /*
-    ============================================
-    LOADING
-    ============================================
-    */
-
-
     function setLoading(
       isLoading
     ) {
+
 
       loginButton.disabled =
         isLoading;
@@ -2354,16 +2152,10 @@
     }
 
 
-    /*
-    ============================================
-    CODE INPUT
-    ============================================
-    */
-
-
     accessCodeInput.addEventListener(
       'input',
       function() {
+
 
         accessCodeInput.value =
           accessCodeInput
