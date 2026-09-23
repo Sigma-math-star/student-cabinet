@@ -132,7 +132,8 @@
       loginInProgress=true;setLoading(true);
       try{
         const requestId=createRequestId();
-        await submitLoginPost(requestId,code,getClientId());
+        const postPromise=submitLoginPost(requestId,code,getClientId());
+        postPromise.catch(error=>console.error(error));
         const result=await waitForLoginResult(requestId);
         if(!result||result.ok!==true){loginError.textContent=result&&result.message?result.message:'Не удалось войти. Попробуйте ещё раз.';return;}
         if(!result.cabinet){loginError.textContent='Не удалось загрузить данные кабинета.';return;}
@@ -152,13 +153,13 @@
         const startedAt=Date.now();let timer=null;let script=null;let callbackReceived=false;
         const cleanup=()=>{if(timer)clearTimeout(timer);if(script&&script.parentNode)script.parentNode.removeChild(script);try{delete window[POLL_CALLBACK]}catch(e){window[POLL_CALLBACK]=undefined}};
         const fail=message=>{cleanup();reject(new Error(message))};
-        const next=(delay=700)=>{timer=setTimeout(poll,delay)};
+        const next=(delay=500)=>{timer=setTimeout(poll,delay)};
 
         window[POLL_CALLBACK]=payload=>{
           callbackReceived=true;
           if(script&&script.parentNode)script.parentNode.removeChild(script);script=null;
           if(!payload){next();return;}
-          if(payload.pending===true){if(Date.now()-startedAt>30000){fail('Истекло время ожидания ответа.');return;}next();return;}
+          if(payload.pending===true){if(Date.now()-startedAt>30000){fail('Истекло время ожидания ответа.');return;}next(500);return;}
           if(payload.pending===false){const result=payload.result;cleanup();resolve(result);return;}
           next();
         };
@@ -168,11 +169,11 @@
           callbackReceived=false;
           const url=new URL(API_URL);url.searchParams.set('action','poll');url.searchParams.set('requestId',requestId);url.searchParams.set('callback',POLL_CALLBACK);url.searchParams.set('_',String(Date.now()));
           script=document.createElement('script');script.async=true;script.src=url.toString();
-          script.onerror=()=>{if(script&&script.parentNode)script.parentNode.removeChild(script);script=null;next(900)};
-          script.onload=()=>{if(!callbackReceived){if(script&&script.parentNode)script.parentNode.removeChild(script);script=null;next(900)}};
+          script.onerror=()=>{if(script&&script.parentNode)script.parentNode.removeChild(script);script=null;next(700)};
+          script.onload=()=>{if(!callbackReceived){if(script&&script.parentNode)script.parentNode.removeChild(script);script=null;next(700)}};
           document.head.appendChild(script);
         }
-        next(350);
+        next(250);
       });
     }
 
