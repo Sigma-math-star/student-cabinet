@@ -150,32 +150,86 @@
 
     function waitForLoginResult(requestId){
       return new Promise((resolve,reject)=>{
-        const startedAt=Date.now();let timer=null;let script=null;let callbackReceived=false;let settled=false;
-        const callbackName=POLL_CALLBACK+'_'+requestId.replace(/[^A-Za-z0-9_$]/g,'_');
-        const cleanup=()=>{if(timer)clearTimeout(timer);if(script&&script.parentNode)script.parentNode.removeChild(script);try{delete window[callbackName]}catch(e){window[callbackName]=undefined}};
+        const startedAt=Date.now();
+        const totalTimeoutMs=30000;
+        const singlePollTimeoutMs=4500;
+        let timer=null;
+        let script=null;
+        let activeCallbackName='';
+        let pollIndex=0;
+        let settled=false;
+        const callbackBase=POLL_CALLBACK+'_'+requestId.replace(/[^A-Za-z0-9_$]/g,'_');
+        const removeScript=node=>{if(node&&node.parentNode)node.parentNode.removeChild(node)};
+        const clearActiveCallback=()=>{if(!activeCallbackName)return;try{delete window[activeCallbackName]}catch(e){window[activeCallbackName]=undefined}activeCallbackName=''};
+        const cleanup=()=>{if(timer)clearTimeout(timer);timer=null;removeScript(script);script=null;clearActiveCallback()};
         const fail=message=>{if(settled)return;settled=true;cleanup();reject(new Error(message))};
         const done=result=>{if(settled)return;settled=true;cleanup();resolve(result)};
-        const next=(delay=500)=>{if(!settled)timer=setTimeout(poll,delay)};
-
-        window[callbackName]=payload=>{
-          callbackReceived=true;
-          if(script&&script.parentNode)script.parentNode.removeChild(script);script=null;
-          if(settled)return;
-          if(!payload){next();return;}
-          if(payload.pending===true){if(Date.now()-startedAt>30000){fail('Истекло время ожидания ответа.');return;}next(500);return;}
-          if(payload.pending===false){done(payload.result);return;}
-          next();
-        };
+        const next=(delay=500)=>{if(settled)return;if(timer)clearTimeout(timer);timer=setTimeout(poll,delay)};
 
         function poll(){
           if(settled)return;
-          if(Date.now()-startedAt>30000){fail('Истекло время ожидания ответа.');return;}
-          callbackReceived=false;
-          const url=new URL(API_URL);url.searchParams.set('action','poll');url.searchParams.set('requestId',requestId);url.searchParams.set('callback',callbackName);url.searchParams.set('_',String(Date.now()));
-          script=document.createElement('script');script.async=true;script.src=url.toString();
-          script.onerror=()=>{if(script&&script.parentNode)script.parentNode.removeChild(script);script=null;next(700)};
-          script.onload=()=>{if(!callbackReceived&&!settled){if(script&&script.parentNode)script.parentNode.removeChild(script);script=null;next(700)}};
-          document.head.appendChild(script);
+          if(Date.now()-startedAt>totalTimeoutMs){fail('Истекло время ожидания ответа.');return;}
+
+          removeScript(script);
+          script=null;
+          clearActiveCallback();
+
+          const currentCallbackName=callbackBase+'_'+(++pollIndex);
+          activeCallbackName=currentCallbackName;
+          let callbackReceived=false;
+          let pollTimedOut=false;
+
+          window[currentCallbackName]=payload=>{
+            if(settled||pollTimedOut||activeCallbackName!==currentCallbackName)return;
+            callbackReceived=true;
+            if(timer)clearTimeout(timer);
+            timer=null;
+            removeScript(script);
+            script=null;
+            clearActiveCallback();
+            if(!payload){next(500);return;}
+            if(payload.pending===true){next(500);return;}
+            if(payload.pending===false){done(payload.result);return;}
+            next(500);
+          };
+
+          const url=new URL(API_URL);
+          url.searchParams.set('action','poll');
+          url.searchParams.set('requestId',requestId);
+          url.searchParams.set('callback',currentCallbackName);
+          url.searchParams.set('_',String(Date.now()));
+
+          const currentScript=document.createElement('script');
+          script=currentScript;
+          currentScript.async=true;
+          currentScript.src=url.toString();
+          currentScript.onerror=()=>{
+            if(settled||activeCallbackName!==currentCallbackName)return;
+            removeScript(currentScript);
+            script=null;
+            clearActiveCallback();
+            next(700);
+          };
+          currentScript.onload=()=>{
+            if(settled||activeCallbackName!==currentCallbackName)return;
+            if(!callbackReceived){
+              removeScript(currentScript);
+              script=null;
+              clearActiveCallback();
+              next(700);
+            }
+          };
+          document.head.appendChild(currentScript);
+
+          if(timer)clearTimeout(timer);
+          timer=setTimeout(()=>{
+            if(settled||callbackReceived||activeCallbackName!==currentCallbackName)return;
+            pollTimedOut=true;
+            removeScript(currentScript);
+            if(script===currentScript)script=null;
+            clearActiveCallback();
+            next(500);
+          },singlePollTimeoutMs);
         }
         next(250);
       });
